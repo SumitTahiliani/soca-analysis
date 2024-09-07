@@ -3,7 +3,7 @@
 import time
 from questionnaire import run_questionnaire
 from ai_model import process_answers
-from gpt_soca_analysis import generate_soca_analysis
+from advanced_soca import generate_soca_analysis
 
 def main():
     print("Welcome to the JEE Student Skill Assessment System!")
