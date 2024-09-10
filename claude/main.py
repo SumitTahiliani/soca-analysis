@@ -1,32 +1,37 @@
-# main.py
-
-import time
-from questionnaire import run_questionnaire
-from ai_model import process_answers
+from questionnaire import get_user_responses, questionnaire
 from advanced_soca import generate_soca_analysis
 
-def main():
-    print("Welcome to the JEE Student Skill Assessment System!")
-    
-    # Run questionnaire
-    print("\nPlease answer the following questions:")
-    answers = run_questionnaire()
-    
-    # Simulate processing time
-    print("\nProcessing your answers. Please wait...")
-    for _ in range(3):
-        time.sleep(1)
-        print(".", end="", flush=True)
-    print("\n")
-    
-    # Process answers using AI model
-    processed_data, insights = process_answers(answers)
-    
-    # Generate SOCA analysis
-    soca_analysis = generate_soca_analysis(processed_data, insights)
-    
-    # Display results
-    print(soca_analysis)
+def format_soca_analysis(soca_analysis):
+    formatted_output = ""
 
+    # Format each section
+    formatted_output += "\nStrengths:\n"
+    for strength in soca_analysis['Strengths']:
+        formatted_output += f"- {strength}\n"
+
+    formatted_output += "\nOpportunities:\n"
+    for opportunity in soca_analysis['Opportunities']:
+        formatted_output += f"- {opportunity}\n"
+
+    formatted_output += "\nChallenges:\n"
+    for challenge in soca_analysis['Challenges']:
+        formatted_output += f"- {challenge}\n"
+
+    formatted_output += "\nAction Plan:\n"
+    for action in soca_analysis['Action Plan']:
+        formatted_output += f"- {action}\n"
+
+    return formatted_output
+
+# Main function to run the skill assessment system
+def run_skill_assessment():
+    print("Welcome to the JEE Skill Assessment System!\n")
+    responses = get_user_responses(questionnaire)
+    soca_analysis = generate_soca_analysis(responses)
+    output = format_soca_analysis(soca_analysis)
+    print(output)
+#     display_soca_analysis(soca_analysis)
+
+# Run the skill assessment system
 if __name__ == "__main__":
-    main()
+    run_skill_assessment()
