@@ -4,23 +4,15 @@ from advanced_soca import generate_soca_analysis
 def format_soca_analysis(soca_analysis):
     formatted_output = ""
 
-    # Format each section
-    formatted_output += "\nStrengths:\n"
-    for strength in soca_analysis['Strengths']:
-        formatted_output += f"- {strength}\n"
-
-    formatted_output += "\nOpportunities:\n"
-    for opportunity in soca_analysis['Opportunities']:
-        formatted_output += f"- {opportunity}\n"
-
-    formatted_output += "\nChallenges:\n"
-    for challenge in soca_analysis['Challenges']:
-        formatted_output += f"- {challenge}\n"
-
-    formatted_output += "\nAction Plan:\n"
-    for action in soca_analysis['Action Plan']:
-        formatted_output += f"- {action}\n"
-
+    # Loop through the analysis components and display each as a simple section
+    for section, content in soca_analysis.items():
+        formatted_output += f"\n{section}:\n"
+        if content:
+            for item in content:
+                formatted_output += f"- {item}\n"
+        else:
+            formatted_output += "No data available.\n"
+    
     return formatted_output
 
 # Main function to run the skill assessment system

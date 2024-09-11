@@ -1,33 +1,40 @@
-# Function to generate SOCA analysis
 from ai_model import generate_ai_response
 import json
 
 def generate_soca_analysis(responses):
-    prompt = f'''Based on the following JEE student's responses, provide a SOCA 
-    (Strengths, Opportunities, Challenges, Action Plan) analysis:
-    \n\n{json.dumps(responses, indent=2)}. Be extremely critical of the student's
-    answers, give specific targeted advice based on the questions being answered right
-    or wrong\n\nSOCA Analysis:'''
+    # Updated prompt to explicitly request each SOCA component clearly
+    prompt = f'''Based on the following JEE student's responses, provide a detailed SOCA 
+    (Strengths, Opportunities, Challenges, Action Plan) analysis. Each section should be 
+    clearly separated and labeled as follows:
     
-    ai_response = generate_ai_response(prompt)
+    Strengths:
+    Opportunities:
+    Challenges:
+    Action Plan:
     
-    # Extract SOCA components from AI response
-    soca = {}
-    current_section = ""
+    Student's responses:
+    \n\n{json.dumps(responses, indent=2)}.'''
+    
+    # Generate the AI response
+    ai_responses = generate_ai_response(prompt)
+    ai_response = ai_responses[0]
+    
+    # Separate SOCA components
+    soca = {"Strengths": [], "Opportunities": [], "Challenges": [], "Action Plan": []}
+    current_section = None
+    
+    # Simplify parsing by looking for keywords directly
     for line in ai_response.split("\n"):
-        if line.startswith("Strengths:"):
+        line = line.strip()
+        if "Strengths:" in line:
             current_section = "Strengths"
-            soca[current_section] = []
-        elif line.startswith("Opportunities:"):
+        elif "Opportunities:" in line:
             current_section = "Opportunities"
-            soca[current_section] = []
-        elif line.startswith("Challenges:"):
+        elif "Challenges:" in line:
             current_section = "Challenges"
-            soca[current_section] = []
-        elif line.startswith("Action Plan:"):
+        elif "Action Plan:" in line:
             current_section = "Action Plan"
-            soca[current_section] = []
-        elif line.strip() and current_section:
-            soca[current_section].append(line.strip())
+        elif line and current_section:
+            soca[current_section].append(line)
     
     return soca

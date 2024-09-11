@@ -1,36 +1,28 @@
-# Load the Qwen2-7B-Instruct model and tokenizer
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
+from transformers import GPT2Tokenizer, GPT2Model, pipeline, set_seed
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model = AutoModelForCausalLM.from_pretrained(
-    "Qwen/Qwen2-7B-Instruct",
-    torch_dtype=torch.float16,
-    device_map="auto"
-)
-tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
+# Load the GPT-2 tokenizer and model
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2Model.from_pretrained('gpt2')
 
-def query_model(messages):
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True
+# Create a text generation pipeline using GPT-2
+generator = pipeline('text-generation', model='gpt2')
+
+# Set a seed for reproducibility
+set_seed(42)
+
+def query_model(prompt, max_length=1024, num_return_sequences=1):
+    # Generate text using the GPT-2 pipeline
+    generated_responses = generator(
+        prompt, 
+        max_length=max_length, 
+        num_return_sequences=num_return_sequences
     )
     
-    model_inputs = tokenizer([text], return_tensors="pt").to(device)
-    generated_ids = model.generate(
-        model_inputs.input_ids,
-        max_new_tokens=2048
-    )
+    # Extract the generated text from the response
+    generated_texts = [response['generated_text'] for response in generated_responses]
     
-    generated_ids = [
-        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-    ]
-    
-    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-    return response
+    return generated_texts
 
-# Function to generate model response
-def generate_ai_response(prompt, max_length=512):
-    messages = [{"role": "user", "content": prompt}]
-    return query_model(messages)
+# Function to generate AI response
+def generate_ai_response(prompt, max_length=512, num_return_sequences=1):
+    return query_model(prompt, max_length, num_return_sequences)
