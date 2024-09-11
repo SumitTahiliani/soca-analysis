@@ -7,6 +7,8 @@ This repo is an implementation of the SOCA (Strengths, Opportunities, Challenges
 ## Deployed system:
 The system, currently deployed as a huggingface space can be accessed [here](https://huggingface.co/spaces/sumittahiliani/soca-deployment)
 
+Research report can be found [here](https://docs.google.com/document/d/1_QNU1UuKzqSblAmBJ6O-KB37VGlgH5-chohW2AxzUvM/edit?usp=sharing)
+
 # Usage
 The analysis can be run locally as well as on kaggle
 ## Running Locally
