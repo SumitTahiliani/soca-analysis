@@ -2,18 +2,25 @@ from ai_model import generate_ai_response
 import json
 
 def generate_soca_analysis(responses):
-    # Updated prompt to explicitly request each SOCA component clearly
-    prompt = f'''Based on the following JEE student's responses, provide a detailed SOCA 
-    (Strengths, Opportunities, Challenges, Action Plan) analysis. Each section should be 
-    clearly separated and labeled as follows:
+    # Improved prompt to explicitly ask for an analysis and not a repeat of the input data
+    prompt = f'''The following are a JEE student's responses to a skill assessment questionnaire.
+    Please analyze their responses and provide a detailed SOCA (Strengths, Opportunities, 
+    Challenges, Action Plan) analysis. Be critical of the student's responses and provide 
+    specific advice based on their answers, identifying strengths, areas of opportunity, 
+    challenges they face, and an actionable plan for improvement.
+    
+    Student's responses:
+    {json.dumps(responses, indent=2)}
+    
+    Provide the SOCA analysis as follows:
     
     Strengths:
     Opportunities:
     Challenges:
     Action Plan:
-    
-    Student's responses:
-    \n\n{json.dumps(responses, indent=2)}.'''
+
+    DO NOT leave any of the four blank
+    '''
     
     # Generate the AI response
     ai_responses = generate_ai_response(prompt)
